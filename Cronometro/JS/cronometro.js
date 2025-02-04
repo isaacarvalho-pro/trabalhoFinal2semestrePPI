@@ -46,3 +46,25 @@ document.getElementById("botaoReiniciar").onclick = function () {
     listaTempos.innerHTML = ''; 
     document.getElementById("botaoIniciar").textContent = "Iniciar"; 
 };
+
+
+document.addEventListener("keydown", function(event) {
+    if (!pausado) {
+        if (!inicio) {
+            inicio = Date.now(); 
+        } else {
+            inicio = Date.now(); 
+        }
+        intervalo = setInterval(atualizaCronometro, 1000); 
+        this.textContent = "Pausar";
+    } else {
+        // Pausar
+        clearInterval(intervalo);
+        const tempoAtual = Math.floor((Date.now() - inicio + tempoPausado) / 1000); 
+        temposParados.push(formataTempo(tempoAtual)); 
+        listaTempos.innerHTML = temposParados.map(time => `<li>${time}</li>`).join(''); 
+        tempoPausado += (Date.now() - inicio); 
+        this.textContent = "Iniciar";
+    }
+    pausado = !pausado;
+});
