@@ -61,7 +61,7 @@ function mostrarFilmes(filmes) {
                     <h3>${filme.title}</h3>
                 </div>
                 <div class="imagem">
-                    <img src="https://image.tmdb.org/t/p/w300${filme.poster_path || '/zKZrCBZDi7ZmB5nGFt7wa5KMgdp.jpg'}" alt="${filme.title}" width="300" height="200">
+                    <img src="https://image.tmdb.org/t/p/w300${filme.poster_path}" alt="${filme.title}" width="300" height="200">
                 </div>
                 <div class="descricao">
                     <p>${filme.overview ? filme.overview : "Descrição não disponível."}</p>
