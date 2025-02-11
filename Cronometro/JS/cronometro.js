@@ -11,60 +11,46 @@ function formataTempo(tempo) {
 }
 
 function atualizaCronometro() {
-    const agora = Date.now(); 
-    const diferenca = Math.floor((agora - inicio + tempoPausado) / 1000); 
+    const agora = Date.now();
+    const diferenca = Math.floor((agora - inicio + tempoPausado) / 1000);
     temporizador.textContent = formataTempo(diferenca);
 }
 
-document.getElementById("botaoIniciar").onclick = function () {
+function alternarCronometro() {
     if (!pausado) {
+        // Iniciar ou retomar
         if (!inicio) {
-            inicio = Date.now(); 
+            inicio = Date.now();
         } else {
-            inicio = Date.now(); 
+            inicio = Date.now();
         }
-        intervalo = setInterval(atualizaCronometro, 1000); 
-        this.textContent = "Pausar";
+        intervalo = setInterval(atualizaCronometro, 1000);
     } else {
         // Pausar
         clearInterval(intervalo);
-        const tempoAtual = Math.floor((Date.now() - inicio + tempoPausado) / 1000); 
-        temposParados.push(formataTempo(tempoAtual)); 
-        listaTempos.innerHTML = temposParados.map(time => `<li>${time}</li>`).join(''); 
-        tempoPausado += (Date.now() - inicio); 
-        this.textContent = "Iniciar";
+        const tempoAtual = Math.floor((Date.now() - inicio + tempoPausado) / 1000);
+        temposParados.push(formataTempo(tempoAtual));
+        listaTempos.innerHTML = temposParados.map(time => `<li>${time}</li>`).join('');
+        tempoPausado += (Date.now() - inicio);
     }
     pausado = !pausado;
-};
+}
+
+document.getElementById("botaoIniciar").onclick = alternarCronometro;
 
 document.getElementById("botaoReiniciar").onclick = function () {
-    clearInterval(intervalo); 
-    inicio = null; 
-    pausado = false; 
-    tempoPausado = 0; 
-    temporizador.textContent = "00:00:00"; 
-    listaTempos.innerHTML = ''; 
-    document.getElementById("botaoIniciar").textContent = "Iniciar"; 
+    clearInterval(intervalo);
+    inicio = null;
+    pausado = false;
+    tempoPausado = 0;
+    temposParados = [];
+    temporizador.textContent = "00:00:00";
+    listaTempos.innerHTML = '';
 };
 
-
 document.addEventListener("keydown", function(event) {
-    if (!pausado) {
-        if (!inicio) {
-            inicio = Date.now(); 
-        } else {
-            inicio = Date.now(); 
-        }
-        intervalo = setInterval(atualizaCronometro, 1000); 
-        this.textContent = "Pausar";
-    } else {
-        // Pausar
-        clearInterval(intervalo);
-        const tempoAtual = Math.floor((Date.now() - inicio + tempoPausado) / 1000); 
-        temposParados.push(formataTempo(tempoAtual)); 
-        listaTempos.innerHTML = temposParados.map(time => `<li>${time}</li>`).join(''); 
-        tempoPausado += (Date.now() - inicio); 
-        this.textContent = "Iniciar";
+    if (event.code === "Space") {
+        event.preventDefault(); // Evita rolagem da página
+        alternarCronometro();
     }
-    pausado = !pausado;
 });
